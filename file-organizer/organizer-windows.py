@@ -6,7 +6,7 @@ class Organizer(object):
     def __init__(self):
         self.login_user = os.getlogin()
         self.download_folder = f'c:/users/{self.login_user}/Downloads'
-        self.folders = ['Imagens', 'Arquivos-office', 'Pdfs', 'Backups-db', 'Anotacoes', 'Installers', 'Zips']
+        self.folders = ['Imagens', 'Arquivos-office', 'Pdfs', 'Anotacoes', 'Instaladores', 'Zips']
         self.documents_folder = f'c:/users/{self.login_user}/OneDrive/Documents'
 
     def get_documents_folder(self):
@@ -35,14 +35,14 @@ class Organizer(object):
         file_organizer = open("organizer.log", "a")
         from random import randint
         try:
-            shutil.move(file, f'{self.documents_folder}/{target_folder}/')
-            print(f'{datetime.now()} - arquivo: {file} movido para: {os.path.realpath(file)}',
+            moved_file = shutil.move(file, f'{self.documents_folder}/{target_folder}/')
+            print(f'{datetime.now()} - arquivo: {file} movido para: {os.path.realpath(moved_file)}',
                   file=file_organizer)
         except Exception:
             new_name = f"{''.join(file.split('.')[0:-1])}({randint(1, 99)}).{file.split('.')[-1]}"
             os.rename(file, new_name)
-            shutil.move(new_name, f'{self.documents_folder}/{target_folder}/')
-            print(f'{datetime.now()} - arquivo: {new_name} movido para: {os.path.realpath(new_name)}',
+            moved_file = shutil.move(new_name, f'{self.documents_folder}/{target_folder}/')
+            print(f'{datetime.now()} - arquivo: {new_name} movido para: {os.path.realpath(moved_file)}',
                   file=file_organizer)
 
     def organize_files(self):
@@ -55,11 +55,9 @@ class Organizer(object):
             elif files.endswith(('.tar', '.zip', '.targz', '.rar', '.xz')):
                 self.move_file(file=files, target_folder="Zips")
             elif files.endswith(('.exe', '.msi')):
-                self.move_file(file=files, target_folder="Installers")
+                self.move_file(file=files, target_folder="Instaladores")
             elif files.endswith('.pdf'):
                 self.move_file(file=files, target_folder="Pdfs")
-            elif files.endswith(('.db', '.sql')):
-                self.move_file(file=files, target_folder="Backups-db")
             elif files.endswith('.txt'):
                 self.move_file(file=files, target_folder="Anotacoes")
 
